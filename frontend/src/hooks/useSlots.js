@@ -13,7 +13,7 @@ export default function useSlots(doctorId) {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        `http://localhost:5000/api/patient/available-slots/${doctorId}`,
+        `https://appointment-scheduling-system-f160.onrender.com/api/patient/available-slots/${doctorId}`,
         {
           headers: {
             Authorization: ` ${token}`,

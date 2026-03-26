@@ -1,1 +1,26 @@
 @import "tailwindcss";
+
+body {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+.nav-link {
+  @apply hover:text-blue-600 transition duration-200;
+}
+
+.btn-outline {
+  @apply border border-gray-300 px-4 py-1 rounded-lg hover:bg-gray-100;
+}
+
+.btn-primary {
+  @apply bg-blue-600 text-white px-4 py-1 rounded-lg hover:bg-blue-700;
+}
+
+.btn-danger {
+  @apply bg-red-500 text-white px-4 py-1 rounded-lg hover:bg-red-600;
+}
+
+.btn-ghost {
+  @apply text-gray-700 hover:text-blue-600;
+}

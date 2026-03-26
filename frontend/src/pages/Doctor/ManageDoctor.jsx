@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import API from "../../services/api";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import AddAvailability from "./AddAvailability";
 
 function DoctorAvailabilityList() {
   const [availability, setAvailability] = useState([]);
@@ -95,6 +96,8 @@ const handleDelete = async (date) => {
   {/* 📅 AVAILABILITY LIST */}
   <div className="bg-base-100 shadow rounded-2xl p-4 md:p-6">
     <h2 className="text-xl font-semibold mb-4">Your Availability</h2>
+
+    <AddAvailability/>
 
     {availability.length === 0 ? (
       <p className="text-gray-500 text-center py-10">

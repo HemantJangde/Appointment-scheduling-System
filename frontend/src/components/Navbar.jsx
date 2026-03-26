@@ -3,6 +3,8 @@ import { useState } from "react";
 import { getUser, getRole, logout } from "../utils/auth";
 import logo from "../assets/logo3.jpeg";
 import AddAvailability from "../pages/Doctor/AddAvailability";
+import { HiMenu, HiX } from "react-icons/hi";
+import { FaUserMd } from "react-icons/fa";
 
 export default function Navbar() {
   const user = getUser();
@@ -15,44 +17,70 @@ export default function Navbar() {
     navigate("/login");
   };
 
-  // 🔹 Menu Items (Reusable)
-  const MenuItems = () => (
+  // 🔹 Center Menu Links
+  const CenterMenu = () => (
     <>
       {!role && (
         <>
-          <Link
-            onClick={() => setIsOpen(false)}
-            to="/"
-            className="btn btn-ghost"
-          >
+          <Link to="/"    onClick={() => setIsOpen(!isOpen)} className="nav-link">
             Home
           </Link>
-          <Link
-            onClick={() => setIsOpen(false)}
-            to="/about"
-            className="btn btn-ghost"
-          >
+          <Link to="/about"    onClick={() => setIsOpen(!isOpen)} className="nav-link">
             About
           </Link>
-          <Link
-            onClick={() => setIsOpen(false)}
-            to="/contact"
-            className="btn btn-ghost"
-          >
+          <Link to="/contact"    onClick={() => setIsOpen(!isOpen)} className="nav-link">
             Contact
           </Link>
-          <Link
-            onClick={() => setIsOpen(false)}
-            to="/login"
-            className="btn btn-outline btn-neutral"
-          >
+        </>
+      )}
+
+      {role === "patient" && (
+        <>
+          <Link to="/"    onClick={() => setIsOpen(!isOpen)} className="nav-link">
+            Home
+          </Link>
+          <Link to="/doctors"    onClick={() => setIsOpen(!isOpen)} className="nav-link">
+            Doctors
+          </Link>
+          <Link to="/about"    onClick={() => setIsOpen(!isOpen)} className="nav-link">
+            About
+          </Link>
+          <Link to="/contact"    onClick={() => setIsOpen(!isOpen)} className="nav-link">
+            Contact
+          </Link>
+        </>
+      )}
+
+      {role === "doctor" && (
+        <>
+          <Link to="/doctor-dashboard"    onClick={() => setIsOpen(!isOpen)} className="nav-link">
+            Dashboard
+          </Link>
+          <Link to="/doctor/edit"    onClick={() => setIsOpen(!isOpen)} className="nav-link">
+            Edit Profile
+          </Link>
+        </>
+      )}
+
+      {role === "admin" && (
+        <>
+          <Link to="/admin-dashboard"    onClick={() => setIsOpen(!isOpen)} className="nav-link">
+            Dashboard
+          </Link>
+        </>
+      )}
+    </>
+  );
+
+  // 🔹 Right Side Actions
+  const RightMenu = () => (
+    <>
+      {!role && (
+        <>
+          <Link to="/login" className="btn-outline">
             Login
           </Link>
-          <Link
-            onClick={() => setIsOpen(false)}
-            to="/register"
-            className="btn btn-primary"
-          >
+          <Link to="/register" className="btn-primary">
             Register
           </Link>
         </>
@@ -60,42 +88,10 @@ export default function Navbar() {
 
       {role === "patient" && (
         <>
-          <Link
-            onClick={() => setIsOpen(false)}
-            to="/"
-            className="btn btn-ghost"
-          >
-            Home
+          <Link to="/profile" className="btn-ghost">
+            👤 {user?.name}
           </Link>
-          <Link
-            onClick={() => setIsOpen(false)}
-            to="/doctors"
-            className="btn btn-ghost"
-          >
-            Doctors
-          </Link>
-          <Link
-            onClick={() => setIsOpen(false)}
-            to="/about"
-            className="btn btn-ghost"
-          >
-            About
-          </Link>
-          <Link
-            onClick={() => setIsOpen(false)}
-            to="/contact"
-            className="btn btn-ghost"
-          >
-            Contact
-          </Link>
-          <Link
-            onClick={() => setIsOpen(false)}
-            to="/profile"
-            className="btn btn-ghost"
-          >
-            Profile
-          </Link>
-          <button onClick={handleLogout} className="btn btn-error btn-sm">
+          <button onClick={handleLogout} className="btn-danger">
             Logout
           </button>
         </>
@@ -103,23 +99,8 @@ export default function Navbar() {
 
       {role === "doctor" && (
         <>
-          <Link
-            onClick={() => setIsOpen(false)}
-            to="/doctor-dashboard"
-            className="btn btn-ghost"
-          >
-            Dashboard
-          </Link>
-         
-          <Link
-            to="/doctor/edit"
-             onClick={() => setIsOpen(false)}
-            className="btn btn-ghost "
-          >
-            Edit Profile
-          </Link>
-          <AddAvailability />
-          <button onClick={handleLogout} className="bg-red-600 font-bold   text-white px-5 py-2 rounded-lg shadow hover:bg-red-700 transition">
+          {/* <AddAvailability />  */}
+          <button onClick={handleLogout} className="btn-danger">
             Logout
           </button>
         </>
@@ -127,10 +108,7 @@ export default function Navbar() {
 
       {role === "admin" && (
         <>
-          <Link to="/admin-dashboard" className="btn btn-ghost">
-            Admin Dashboard
-          </Link>
-          <button onClick={handleLogout} className="btn  btn-xl">
+          <button onClick={handleLogout} className="btn-danger">
             Logout
           </button>
         </>
@@ -138,35 +116,49 @@ export default function Navbar() {
     </>
   );
 
-  return (
-    <div className="navbar bg-base-100 shadow-md px-4 md:px-6">
-      {/* 🔹 Left: Logo + Mobile Menu */}
-      <div className="flex-1 flex items-center gap-2">
-        {/* Logo */}
-        <Link to="/">
-          <img src={logo} className="w-28 md:w-32" alt="logo" />
-        </Link>
-      </div>
-
-      {/* 🔹 Desktop Menu */}
-      <div className="hidden lg:flex gap-3">
-        <MenuItems />
-      </div>
-
-      {/* 🔹 Mobile Dropdown */}
-      {isOpen && (
-        <div className="absolute top-16 left-0 w-full bg-base-100 shadow-md flex flex-col items-start p-4 gap-3 lg:hidden z-50">
-          <MenuItems />
+ return (
+  <div className="sticky top-0 z-50 bg-gray-300/40 backdrop-blur-xl border border-white/30">
+    <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      
+      {/* 🔹 LEFT: Logo */}
+      <div className="flex items-center gap-2 cursor-pointer">
+        <div className="bg-gradient-to-r from-blue-500 to-cyan-400 p-2 rounded-xl shadow-sm">
+          <FaUserMd className="text-white text-lg" />
         </div>
-      )}
 
-      {/* 🍔 Mobile Hamburger */}
+        <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+          MediBook
+        </h1>
+      </div>
+
+      {/* 🔹 CENTER */}
+      <div className="hidden lg:flex items-center gap-8 text-gray-800 font-semibold">
+        <CenterMenu />
+      </div>
+
+      {/* 🔹 RIGHT */}
+      <div className="hidden lg:flex items-center gap-3">
+        <RightMenu />
+      </div>
+
+      {/* 🔹 Mobile Button */}
       <button
-        className="btn btn-ghost lg:hidden"
+        className="lg:hidden text-gray-800 text-2xl"
         onClick={() => setIsOpen(!isOpen)}
       >
-        ☰
+        {isOpen ? <HiX /> : <HiMenu />}
       </button>
     </div>
-  );
+
+    {/* 🔻 Mobile Menu */}
+    {isOpen && (
+      <div className="lg:hidden bg-white/60 backdrop-blur-md px-6 pb-4 flex flex-col gap-4 text-gray-800 shadow-lg">
+        <CenterMenu />
+        <div className="border-t border-gray-200/60 pt-3 flex flex-col gap-3">
+          <RightMenu />
+        </div>
+      </div>
+    )}
+  </div>
+);
 }

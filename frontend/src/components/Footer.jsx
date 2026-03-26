@@ -1,58 +1,57 @@
-import { Link } from "react-router-dom";
-import logo from '../assets/logo3.jpeg'
+import { Mail, Phone, MapPin } from "lucide-react";
 
-const Footer = () => {
+export default function Footer() {
   return (
-    <div className="mx-4 sm:mx-[10%]">
-    <footer className="mx-4 md:mx-10 mt-40">
+    <footer className="relative mt-16 border-t border-gray-200 bg-white text-gray-800 overflow-hidden">
+      
+      {/* Light Gradient Glow */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-blue-100 via-purple-100 to-pink-100 opacity-40 blur-3xl"></div>
 
-      {/* Top Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 text-sm">
-
-        {/* Logo + Description */}
+      <div className="relative max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-10">
+        
+        {/* Logo / About */}
         <div>
-          <img
-            src={logo}
-            alt="logo"
-            className="w-36 mb-5"
-          />
-          <p className="text-gray-600 leading-6 md:w-2/3">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s.
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-pink-500 bg-clip-text text-transparent">
+            MediBook
+          </h2>
+          <p className="mt-4 text-gray-600 text-sm leading-relaxed">
+            Simplifying appointment scheduling for doctors and patients.
+            Book appointments, manage schedules, and stay organized — all in one place.
           </p>
         </div>
 
-        {/* Company Links */}
+        {/* Quick Links */}
         <div>
-          <h3 className="text-lg font-semibold mb-4">COMPANY</h3>
-          <ul className="flex flex-col gap-2 text-gray-600">
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/about">About us</Link></li>
-            <li><Link to="/delivery">Delivery</Link></li>
-            <li><Link to="/privacy">Privacy policy</Link></li>
+          <h3 className="text-lg font-semibold mb-4 text-gray-900">Quick Links</h3>
+          <ul className="space-y-2 text-gray-600 text-sm">
+            <li className="hover:text-blue-500 transition cursor-pointer">Home</li>
+            <li className="hover:text-blue-500 transition cursor-pointer">Doctors</li>
+            <li className="hover:text-blue-500 transition cursor-pointer">Appointments</li>
+            <li className="hover:text-blue-500 transition cursor-pointer">Contact</li>
           </ul>
         </div>
 
-        {/* Contact */}
+        {/* Contact Info */}
         <div>
-          <h3 className="text-lg font-semibold mb-4">GET IN TOUCH</h3>
-          <ul className="flex flex-col gap-2 text-gray-600">
-            <li>+0-000-000-000</li>
-            <li>Dr.Hub@gmail.com</li>
+          <h3 className="text-lg font-semibold mb-4 text-gray-900">Contact</h3>
+          <ul className="space-y-3 text-gray-600 text-sm">
+            <li className="flex items-center gap-2">
+              <Mail size={16} /> support@medibook.com
+            </li>
+            <li className="flex items-center gap-2">
+              <Phone size={16} /> +91 98765 43210
+            </li>
+            <li className="flex items-center gap-2">
+              <MapPin size={16} /> India
+            </li>
           </ul>
         </div>
       </div>
 
-      {/* Bottom Section */}
-      <div className="mt-10 border-t pt-5 text-center text-sm text-gray-500">
-        <p>
-          © {new Date().getFullYear()} Dr Hub - All Rights Reserved.
-        </p>
+      {/* Bottom Bar */}
+      <div className="relative border-t border-gray-200 text-center py-4 text-sm text-gray-500">
+        © {new Date().getFullYear()} MediBook. All rights reserved.
       </div>
     </footer>
-    </div>
   );
-};
-
-export default Footer;
+}
