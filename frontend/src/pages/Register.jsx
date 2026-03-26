@@ -13,13 +13,10 @@ export default function Register() {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState("");
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file);
-      setPreview(URL.createObjectURL(file));
-    }
-  };
+  const [passwordStrength, setPasswordStrength] = useState({
+    level: "",
+    color: "",
+  });
 
   const [form, setForm] = useState({
     name: "",
@@ -34,38 +31,81 @@ export default function Register() {
     fees: "",
   });
 
+  // 🔹 Handle Image
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  };
+
+  // 🔹 Password strength check
+  const checkPasswordStrength = (password) => {
+    let strength = 0;
+    if (password.length >= 8) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+    if (strength <= 1) setPasswordStrength({ level: "Weak", color: "red" });
+    else if (strength <= 3)
+      setPasswordStrength({ level: "Medium", color: "orange" });
+    else setPasswordStrength({ level: "Strong", color: "green" });
+  };
+
+  // 🔹 Validate fields before submit
+  const validateFields = () => {
+    if (!form.name || !form.email || !form.password) {
+      toast.error("Name, Email, and Password are required");
+      return false;
+    }
+
+    if (role === "patient" && !form.phone) {
+      toast.error("Phone number is required for patients");
+      return false;
+    }
+
+    if (role === "doctor") {
+      const doctorFields = [
+        "qualification",
+        "specialization",
+        "experience",
+        "licenseNumber",
+        "address",
+        "fees",
+      ];
+      for (let field of doctorFields) {
+        if (!form[field]) {
+          toast.error(`Field "${field}" is required for doctors`);
+          return false;
+        }
+      }
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    if (!validateFields()) return;
 
+    setLoading(true);
     try {
       let url = "";
-
       if (role === "patient") {
         url = "/auth/register-patient";
-
         const res = await API.post(url, form);
-
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("role", res.data.role);
         localStorage.setItem("user", JSON.stringify(res.data.user));
-
         toast.success("Welcome 🎉");
         window.location.href = "/patient-dashboard";
       } else {
         url = "/auth/register-doctor";
-
         const formData = new FormData();
-        Object.keys(form).forEach((key) =>
-          formData.append(key, form[key])
-        );
-
+        Object.keys(form).forEach((key) => formData.append(key, form[key]));
         if (image) formData.append("image", image);
-
-        if (!form.fees) {
-          setLoading(false);
-          return toast.error("Enter consultation fee");
-        }
 
         await API.post(url, formData, {
           headers: { "Content-Type": "multipart/form-data" },
@@ -75,7 +115,9 @@ export default function Register() {
         window.location.href = "/login";
       }
     } catch (err) {
-      toast.error(err.response?.data?.message || "Error ❌");
+      toast.error(
+        err.response?.data?.message || "You have to wait for admin approval"
+      );
     } finally {
       setLoading(false);
     }
@@ -83,15 +125,10 @@ export default function Register() {
 
   return (
     <div className="relative flex py-10 items-center justify-center min-h-screen overflow-hidden">
-      
-      {/* 🌈 Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100"></div>
-
-      {/* Glow */}
       <div className="absolute w-[400px] h-[400px] bg-purple-300/30 blur-3xl rounded-full top-10 left-10"></div>
       <div className="absolute w-[300px] h-[300px] bg-pink-300/30 blur-3xl rounded-full bottom-10 right-10"></div>
 
-      {/* 🧊 Glass Card */}
       <form
         onSubmit={handleSubmit}
         className="relative z-10 w-[350px] p-8 rounded-2xl backdrop-blur-xl bg-white/60 border border-white/40 shadow-xl"
@@ -106,9 +143,7 @@ export default function Register() {
             type="button"
             onClick={() => setRole("patient")}
             className={`w-1/2 py-2 rounded-full text-sm font-medium ${
-              role === "patient"
-                ? "bg-indigo-500 text-white"
-                : "text-gray-600"
+              role === "patient" ? "bg-indigo-500 text-white" : "text-gray-600"
             }`}
           >
             Patient
@@ -117,9 +152,7 @@ export default function Register() {
             type="button"
             onClick={() => setRole("doctor")}
             className={`w-1/2 py-2 rounded-full text-sm font-medium ${
-              role === "doctor"
-                ? "bg-indigo-500 text-white"
-                : "text-gray-600"
+              role === "doctor" ? "bg-indigo-500 text-white" : "text-gray-600"
             }`}
           >
             Doctor
@@ -147,9 +180,11 @@ export default function Register() {
             type={showPassword ? "text" : "password"}
             placeholder="Password"
             className="w-full h-12 px-4 pr-10 rounded-xl border bg-white/70"
-            onChange={(e) =>
-              setForm({ ...form, password: e.target.value })
-            }
+            onChange={(e) => {
+              const pwd = e.target.value;
+              setForm({ ...form, password: pwd });
+              checkPasswordStrength(pwd);
+            }}
           />
           <span
             onClick={() => setShowPassword(!showPassword)}
@@ -157,6 +192,14 @@ export default function Register() {
           >
             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
           </span>
+          {form.password && (
+            <p
+              className="mt-1 text-sm font-medium"
+              style={{ color: passwordStrength.color }}
+            >
+              Password Strength: {passwordStrength.level}
+            </p>
+          )}
         </div>
 
         {/* Patient */}
@@ -165,17 +208,13 @@ export default function Register() {
             type="text"
             placeholder="Phone"
             className="mt-3 w-full h-12 px-4 rounded-xl border bg-white/70"
-            onChange={(e) =>
-              setForm({ ...form, phone: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, phone: e.target.value })}
           />
         )}
 
         {/* Doctor */}
         {role === "doctor" && (
           <>
-           
-
             <input
               type="text"
               placeholder="Qualification"
@@ -184,7 +223,6 @@ export default function Register() {
                 setForm({ ...form, qualification: e.target.value })
               }
             />
-
             <input
               type="text"
               placeholder="Specialization"
@@ -193,7 +231,6 @@ export default function Register() {
                 setForm({ ...form, specialization: e.target.value })
               }
             />
-
             <input
               type="number"
               placeholder="Experience (years)"
@@ -202,7 +239,6 @@ export default function Register() {
                 setForm({ ...form, experience: e.target.value })
               }
             />
-
             <input
               type="text"
               placeholder="License Number"
@@ -211,56 +247,39 @@ export default function Register() {
                 setForm({ ...form, licenseNumber: e.target.value })
               }
             />
-
             <input
               type="text"
               placeholder="Address"
               className="mt-3 w-full h-12 px-4 rounded-xl border bg-white/70"
-              onChange={(e) =>
-                setForm({ ...form, address: e.target.value })
-              }
+              onChange={(e) => setForm({ ...form, address: e.target.value })}
             />
-
             <input
               type="number"
               placeholder="Consultation Fee"
               className="mt-3 w-full h-12 px-4 rounded-xl border bg-white/70"
-              onChange={(e) =>
-                setForm({ ...form, fees: e.target.value })
-              }
+              onChange={(e) => setForm({ ...form, fees: e.target.value })}
             />
 
+            {/* Profile Image */}
             <div className="mt-4 w-full">
-  {/* Label */}
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Profile Image
-  </label>
-
-  {/* Upload Box */}
-  <label className="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-indigo-400 transition bg-white/70">
-    <span className="text-gray-500 text-sm">
-      Click to upload image
-    </span>
-
-    <input
-      type="file"
-      className="hidden"
-      onChange={handleImageChange}
-    />
-  </label>
-
-  {/* Preview */}
-  {preview && (
-    <div className="flex items-center gap-3 mt-3">
-      <img
-        src={preview}
-        alt="preview"
-        className="w-14 h-14 rounded-full object-cover border"
-      />
-      <p className="text-sm text-gray-600">Image selected</p>
-    </div>
-  )}
-</div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Profile Image
+              </label>
+              <label className="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-indigo-400 transition bg-white/70">
+                <span className="text-gray-500 text-sm">Click to upload image</span>
+                <input type="file" className="hidden" onChange={handleImageChange} />
+              </label>
+              {preview && (
+                <div className="flex items-center gap-3 mt-3">
+                  <img
+                    src={preview}
+                    alt="preview"
+                    className="w-14 h-14 rounded-full object-cover border"
+                  />
+                  <p className="text-sm text-gray-600">Image selected</p>
+                </div>
+              )}
+            </div>
           </>
         )}
 
@@ -269,7 +288,6 @@ export default function Register() {
           Register as {role}
         </button>
 
-        {/* Login */}
         <p className="text-center mt-4 text-sm text-gray-600">
           Already have an account?{" "}
           <Link to="/login" className="text-indigo-500 font-semibold">
@@ -278,11 +296,11 @@ export default function Register() {
         </p>
       </form>
 
-      {/* 🔥 Loading Overlay */}
+      {/* Loading Overlay */}
       {loading && (
         <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white/70 backdrop-blur-md">
           <LoaderFour />
-          <p className="mt-4 text-gray-700">Creating your account...</p>
+          <p className="mt-4 text-gray-700">Doctor have to wait for Admin Approval</p>
         </div>
       )}
     </div>
