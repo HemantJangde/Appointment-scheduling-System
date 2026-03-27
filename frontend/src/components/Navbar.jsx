@@ -8,7 +8,7 @@ import { FaUserMd } from "react-icons/fa";
 
 export default function Navbar() {
   const user = getUser();
-  console.log(user);
+
   
   const role = getRole();
   const navigate = useNavigate();
@@ -49,6 +49,10 @@ export default function Navbar() {
           </Link>
           <Link to="/contact"    onClick={() => setIsOpen(!isOpen)} className="nav-link">
             Contact
+          </Link>
+          
+              <Link to="/buyTokens"    onClick={() => setIsOpen(!isOpen)} className="nav-link">
+            Buy Token
           </Link>
         </>
       )}
@@ -93,6 +97,7 @@ export default function Navbar() {
           <Link to="/profile" onClick={() => setIsOpen(!isOpen)} className="btn-ghost">
             👤 {user?.name}
           </Link>
+        
           <button onClick={handleLogout} className="btn-danger">
             Logout
           </button>

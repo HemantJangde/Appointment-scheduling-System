@@ -14,13 +14,5 @@ export default function PatientDashboard() {
     fetchTokens();
   }, []);
 
-  return (
-    <div className="p-5">
-      <h1 className="text-xl font-bold">Patient Dashboard</h1>
-
-      <div className="mt-4 p-4 bg-blue-100 rounded">
-        <h2 className="text-lg">Your Tokens: {tokens}</h2>
-      </div>
-    </div>
-  );
+  return        <h3 className="text-lg">Your Tokens: {tokens}</h3>
 }
