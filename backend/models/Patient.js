@@ -21,6 +21,38 @@ const patientSchema = new mongoose.Schema(
     phone: {
       type: String,
     },
+
+     // 🖼 Profile Image (Cloudinary URL)
+    image: {
+      type: String,
+    },
+
+    // 🩸 Blood Group
+    bloodGroup: {
+      type: String,
+      enum: ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"],
+    },
+
+    // 📏 Height (cm)
+    height: {
+      type: Number,
+    },
+
+    // ⚖️ Weight (kg)
+    weight: {
+      type: Number,
+    },
+
+    // 📋 Optional extra info
+    age: {
+      type: Number,
+    },
+
+    gender: {
+      type: String,
+      enum: ["male", "female", "other"],
+    },
+
     tokens: {
       type: Number,
       default: 100,

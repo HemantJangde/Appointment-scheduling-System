@@ -8,6 +8,8 @@ import { FaUserMd } from "react-icons/fa";
 
 export default function Navbar() {
   const user = getUser();
+  console.log(user);
+  
   const role = getRole();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);

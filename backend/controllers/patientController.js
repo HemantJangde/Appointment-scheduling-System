@@ -4,7 +4,9 @@ const Appointment = require("../models/Appointment");
 const Patient = require("../models/Patient");
 const Doctor = require("../models/Doctor");
 const Transaction = require("../models/Transaction");
-// const Patient = require("../models/Patient");
+
+const cloudinary = require("../config/cloudinary");
+
 
 exports.getMyTokens = async (req, res) => {
   try {
@@ -247,4 +249,78 @@ exports.addAvailability = async (req, res) => {
 
   }
 
+};
+
+// UPDATE PATIENT PROFILE
+exports.updatePatientProfile = async (req, res) => {
+  try {
+    const userId = req.user.id; // from auth middleware
+    let imageUrl;
+
+    // Upload image if file exists
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "patients",
+      });
+      imageUrl = result.secure_url;
+    }
+
+    // Build update object dynamically
+    const updateFields = {};
+    const allowedFields = [
+      "name",
+      "phone",
+      "bloodGroup",
+      "height",
+      "weight",
+      "age",
+      "gender",
+      "address",
+    ];
+
+    allowedFields.forEach((field) => {
+      if (req.body[field] !== undefined) updateFields[field] = req.body[field];
+    });
+
+    if (imageUrl) updateFields.image = imageUrl;
+
+    const updatedPatient = await Patient.findByIdAndUpdate(userId, updateFields, {
+      new: true,
+      runValidators: true,
+    }).select("-password"); // hide password
+
+    if (!updatedPatient)
+      return res.status(404).json({ success: false, message: "Patient not found" });
+
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      data: updatedPatient,
+    });
+  } catch (error) {
+    console.error("Update Profile Error:", error);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+exports.getPatientProfile = async (req, res) => {
+  try {
+    const userId = req.user.id; // from auth middleware
+
+    const patient = await Patient.findById(userId).select("-password");
+
+    if (!patient) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Patient not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: patient,
+    });
+  } catch (error) {
+    console.error("Get Profile Error:", error);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
 };

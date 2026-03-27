@@ -21,6 +21,7 @@ import AddAvailability from "./pages/Doctor/AddAvailability";
 import DoctorProfileEdit from "./pages/Doctor/DoctorProfileEdit";
 import ManageDoctor from "./pages/Doctor/ManageDoctor";
 import ScrollToTop from "./services/ScrollToTop";
+import PatientEditProfile from "./pages/patient/PatientEditProfile";
 
 
 function App() {
@@ -77,6 +78,8 @@ function App() {
             <Route path="add-availability" element={<AddAvailability/>}/>
             <Route path="/doctor/edit" element={<DoctorProfileEdit />} />
             <Route path="/manage-availability" element={<ManageDoctor/>}/>
+            <Route path="/profile" element={<PatientEditProfile/>}/>
+
 
 
 
