@@ -23,7 +23,7 @@ const patientSchema = new mongoose.Schema(
     },
     tokens: {
       type: Number,
-      default: 0,
+      default: 100,
     },
   },
   { timestamps: true },

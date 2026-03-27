@@ -77,10 +77,10 @@ export default function Navbar() {
     <>
       {!role && (
         <>
-          <Link to="/login" className="btn-outline">
+          <Link to="/login" onClick={() => setIsOpen(!isOpen)} className="btn-outline">
             Login
           </Link>
-          <Link to="/register" className="btn-primary">
+          <Link to="/register" onClick={() => setIsOpen(!isOpen)} className="btn-primary">
             Register
           </Link>
         </>
@@ -88,7 +88,7 @@ export default function Navbar() {
 
       {role === "patient" && (
         <>
-          <Link to="/profile" className="btn-ghost">
+          <Link to="/profile" onClick={() => setIsOpen(!isOpen)} className="btn-ghost">
             👤 {user?.name}
           </Link>
           <button onClick={handleLogout} className="btn-danger">
@@ -96,7 +96,6 @@ export default function Navbar() {
           </button>
         </>
       )}
-
       {role === "doctor" && (
         <>
           {/* <AddAvailability />  */}
@@ -127,7 +126,7 @@ export default function Navbar() {
         </div>
 
         <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-          MediBook
+          Dr Hub
         </h1>
       </div>
 
@@ -152,9 +151,9 @@ export default function Navbar() {
 
     {/* 🔻 Mobile Menu */}
     {isOpen && (
-      <div className="lg:hidden bg-white/60 backdrop-blur-md px-6 pb-4 flex flex-col gap-4 text-gray-800 shadow-lg">
+      <div className="lg:hidden  bg-white/60 backdrop-blur-md px-6 pb-4 flex flex-col gap-4 text-gray-800 shadow-lg">
         <CenterMenu />
-        <div className="border-t border-gray-200/60 pt-3 flex flex-col gap-3">
+        <div className="border-t  border-gray-200/60 pt-3 flex flex-col gap-3">
           <RightMenu />
         </div>
       </div>

@@ -16,10 +16,10 @@ export default function Home() {
     <>
     {/* <PatientDashboard/> */}
     <HeroSection/>
-    <BMICalculator/>
-    <QuickServices/>
-    {/* <FeaturedDoctors/> */}
     <HowItWorks/>
+    <BMICalculator/>
+    {/* <FeaturedDoctors/> */}
+    <QuickServices/>
     <Testimonials/>
     <HealthTips/>
     {/* <Contact/> */}

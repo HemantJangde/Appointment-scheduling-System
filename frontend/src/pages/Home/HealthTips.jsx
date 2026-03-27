@@ -19,13 +19,13 @@ const HealthTips = () => {
               in your meals to boost immunity and overall health.
             </p>
           </div>
-          <img
+          {/* <img
             src="/healthy_food.webp"
             width={400}
             height={400}
             alt="healthy food"
             className="absolute -right-4 md:-right-20 lg:-right-[40%] -bottom-8 md:-bottom-10 object-contain rounded-2xl w-40 md:w-48 lg:w-60"
-          />
+          /> */}
         </WobbleCard>
 
         {/* Tip 2: Exercise */}
@@ -54,13 +54,13 @@ const HealthTips = () => {
               keep your body functioning optimally.
             </p>
           </div>
-          <img
+          {/* <img
             src="/sleep_hydration.webp"
             width={400}
             height={400}
             alt="sleep and hydration"
             className="absolute -right-4 md:-right-20 lg:-right-[20%] -bottom-8 md:-bottom-10 object-contain rounded-2xl w-40 md:w-48 lg:w-60"
-          />
+          /> */}
         </WobbleCard>
       </div>
     </div >

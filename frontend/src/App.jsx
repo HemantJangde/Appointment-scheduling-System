@@ -20,6 +20,7 @@ import DoctorDetail from "./pages/patient/DoctorDetail";
 import AddAvailability from "./pages/Doctor/AddAvailability";
 import DoctorProfileEdit from "./pages/Doctor/DoctorProfileEdit";
 import ManageDoctor from "./pages/Doctor/ManageDoctor";
+import ScrollToTop from "./services/ScrollToTop";
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
     <>
       <BrowserRouter>
         <Navbar />
+        <ScrollToTop/>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />

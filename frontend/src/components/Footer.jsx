@@ -12,7 +12,7 @@ export default function Footer() {
         {/* Logo / About */}
         <div>
           <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-pink-500 bg-clip-text text-transparent">
-            MediBook
+            Dr Hub
           </h2>
           <p className="mt-4 text-gray-600 text-sm leading-relaxed">
             Simplifying appointment scheduling for doctors and patients.
@@ -36,7 +36,7 @@ export default function Footer() {
           <h3 className="text-lg font-semibold mb-4 text-gray-900">Contact</h3>
           <ul className="space-y-3 text-gray-600 text-sm">
             <li className="flex items-center gap-2">
-              <Mail size={16} /> support@medibook.com
+              <Mail size={16} /> support@Dr Hub.com
             </li>
             <li className="flex items-center gap-2">
               <Phone size={16} /> +91 98765 43210
@@ -50,7 +50,7 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="relative border-t border-gray-200 text-center py-4 text-sm text-gray-500">
-        © {new Date().getFullYear()} MediBook. All rights reserved.
+        © {new Date().getFullYear()} Dr Hub. All rights reserved.
       </div>
     </footer>
   );

@@ -6,6 +6,7 @@ body {
   font-style: normal;
 }
 .nav-link {
+  margin-top: 7px;
   @apply hover:text-blue-600 transition duration-200;
 }
 
